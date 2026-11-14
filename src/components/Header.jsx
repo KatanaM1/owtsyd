@@ -3,7 +3,7 @@ export default function Header() {
     <header className="blue">
       <div className="wrap header">
         <a className="brand" href="#top" aria-label="OWTSYD home">
-          <span className="brand-mark" aria-hidden="true">✳</span> OWTSYD
+           OWTSYD
         </a>
         <nav aria-label="Main navigation">
           <a href="#work">Work</a>
