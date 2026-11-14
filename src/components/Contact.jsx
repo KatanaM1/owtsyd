@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 
 const PLAN_OPTIONS = [
   'Free redesign prototype',
@@ -12,47 +12,26 @@ const PLAN_OPTIONS = [
 
 export default function Contact({ selectedPlan, setSelectedPlan, onOpenBrief }) {
   const formRef = useRef(null)
-  const requestIdRef = useRef()
   const [status, setStatus] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleInput = () => { requestIdRef.current = undefined }
-
+  // Имитация отправки (Заглушка)
   async function handleSubmit(e) {
     e.preventDefault()
-    requestIdRef.current ??= crypto.randomUUID()
-    const formData = new FormData(formRef.current)
-    const data = Object.fromEntries(formData)
-    const submittedId = requestIdRef.current
-    data.requestId = submittedId
-
     setIsSubmitting(true)
     setStatus('Submitting your brief…')
 
-    try {
-      const response = await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      })
-      const result = await response.json()
-      
-      if (!response.ok || result.saved !== true) {
-        setStatus(result.error || 'Could not submit your brief. Please try again.')
-        return
-      }
-      
-      if (requestIdRef.current === submittedId) {
-        formRef.current.reset()
-        setSelectedPlan('Free redesign prototype')
-        requestIdRef.current = undefined
-      }
-      setStatus('Thanks. We’ve received your brief and will reply by email.')
-    } catch {
-      setStatus('Could not confirm submission. Please try again.')
-    } finally {
+    // Имитируем задержку сети на 1 секунду
+    setTimeout(() => {
       setIsSubmitting(false)
-    }
+      setStatus('Thanks. We’ve received your brief. (Demo mode: no actual email sent)')
+      
+      // Очищаем форму для красоты
+      if (formRef.current) {
+        formRef.current.reset()
+      }
+      setSelectedPlan('Free redesign prototype')
+    }, 1000)
   }
 
   return (
@@ -76,7 +55,7 @@ export default function Contact({ selectedPlan, setSelectedPlan, onOpenBrief }) 
       </div>
 
       <section id="brief-form" className="wrap brief-panel" aria-labelledby="brief-title">
-        <form ref={formRef} id="project-form" onSubmit={handleSubmit} onInput={handleInput}>
+        <form ref={formRef} id="project-form" onSubmit={handleSubmit}>
           <h3 id="brief-title">Your project brief</h3>
           <p className="brief-note">Tell us a little about your project and leave an email address so we can get back to you.</p>
           
@@ -99,7 +78,7 @@ export default function Contact({ selectedPlan, setSelectedPlan, onOpenBrief }) 
           
           <div className="form-actions">
             <button className="button accent" type="submit" disabled={isSubmitting}>
-              Submit Project Brief <span aria-hidden="true">↗</span>
+              {isSubmitting ? 'Submitting...' : 'Submit Project Brief'} <span aria-hidden="true">↗</span>
             </button>
           </div>
           <p id="form-status" role="status">{status}</p>
