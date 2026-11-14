@@ -1,29 +1,28 @@
 export default function Hero({ onOpenBrief }) {
   return (
-    <div className="blue">
+    <div>
       <section className="wrap hero" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="label"><i></i> New websites &amp; redesigns</p>
+          <p className="label">Web design &amp; graphic design</p>
           <h1 id="hero-title">
-            Premium Web Design for <em>U.S. Small Businesses.</em>
+            Web design for <em>small businesses.</em>
           </h1>
           <p className="lede">
-            We turn outdated websites into mobile-first experiences built for bookings.
-            See a redesign concept in 48 hours.
+            We build and redesign mobile-first websites for businesses. Get a free redesign prototype within 48 hours.
           </p>
-          <button
-            type="button"
-            className="button accent"
-            onClick={() => onOpenBrief()}
+          <a 
+            className="button accent" 
+            href="#brief-form" 
+            onClick={(e) => { e.preventDefault(); onOpenBrief(); }}
           >
-            Get a Free Redesign Concept <span aria-hidden="true">↗</span>
-          </button>
+            Get a Free Redesign Prototype <span aria-hidden="true">↗</span>
+          </a>
         </div>
-        <div className="hero-visual" aria-hidden="true">
-          <div className="hero-grid" />
-          <div className="hero-window" />
-          <div className="hero-phone" />
-        </div>
+        <figure className="hero-visual">
+          <div className="hero-grid" aria-hidden="true" />
+          <img className="hero-window" src="/umbr-desktop.webp" alt="Desktop mockup of the UMBR fashion website" width="1440" height="900" fetchPriority="high" />
+          <img className="hero-phone" src="/umbr-mobile.webp" alt="Mobile mockup of the UMBR fashion website" width="390" height="844" />
+        </figure>
       </section>
     </div>
   )

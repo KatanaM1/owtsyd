@@ -1,19 +1,7 @@
 const STEPS = [
-  {
-    n: '01',
-    title: 'The Brief & Deposit',
-    text: 'Share your goals in a short brief. Once we agree on scope, a 50% deposit starts the build.',
-  },
-  {
-    n: '02',
-    title: 'The Build',
-    text: 'We design and build your site. Allow 2–4 days for a multi-page build once your content is ready.',
-  },
-  {
-    n: '03',
-    title: 'Launch & Handoff',
-    text: 'We make final edits, collect the balance, and hand over your site and access.',
-  },
+  { n: '01', title: 'The Brief & Deposit', text: 'Share your goals in a short brief. Once we agree on scope, a 50% deposit starts the build.' },
+  { n: '02', title: 'Build & Test', text: 'Once the design and content are ready, we spend several days building and testing your site. We check mobile and desktop layouts, links, and forms, then fix any issues before launch. The exact timeline depends on the scope.' },
+  { n: '03', title: 'Launch & Handoff', text: 'We make final edits, collect the balance, and hand over your site and access.' },
 ]
 
 export default function Process() {
