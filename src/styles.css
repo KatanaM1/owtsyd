@@ -14,7 +14,7 @@
   --font-heavy: 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;
   --font-medium: 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;
   
-  /* Глобальные отступы через clamp */
+  /* Глобальные отступы */
   --wrap-padding: clamp(16px, 5vw, 52px);
 }
 
@@ -50,7 +50,7 @@ section[id] { scroll-margin-top: 14px; }
 .skip:focus { transform: translateY(0); }
 
 /* =========================================
-   ТИПОГРАФИКА (Плавное изменение размера)
+   ТИПОГРАФИКА
    ========================================= */
 h1, h2, h3 { 
   font-family: var(--font-heavy);
@@ -122,7 +122,6 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .top-link span { margin-left: 7px; color: var(--yellow); }
 .top-link:hover { border-color: var(--yellow); background: var(--panel); }
 
-/* Отзывчивая сетка Hero: сама перестроится, когда станет тесно */
 .hero { 
   display: grid; 
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); 
@@ -147,26 +146,13 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .section { padding-block: clamp(57px, 8vw, 104px); }
 
 .section-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: clamp(10px, 2vw, 18px); margin-bottom: clamp(24px, 4vw, 31px); }
-.section-heading > p { 
-  max-width: 340px; 
-  color: var(--muted); 
-  font-size: clamp(13px, 1vw, 14px); /* Уменьшили до размера инструкции */
-}
+.section-heading > p { max-width: 340px; color: var(--muted); font-size: clamp(13px, 1vw, 14px); }
 
-/* Отзывчивая сетка Work */
 .work { background: var(--panel); }
 .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); gap: clamp(24px, 4vw, 36px); }
 .project { min-width: 0; }
 .project p { margin-top: 6px; font-size: clamp(13px, 1vw, 14px); color: var(--muted); }
-
-/* Исправленный отступ для инструкции (без !important) */
-.project .slider-instruction {
-  margin-top: clamp(24px, 4vw, 40px);
-  max-width: 340px;
-  color: var(--muted);
-  font-size: clamp(13px, 1vw, 14px);
-  display: block;
-}
+.project .slider-instruction { margin-top: clamp(24px, 4vw, 40px); max-width: 340px; color: var(--muted); font-size: clamp(13px, 1vw, 14px); display: block; }
 
 .comparison { margin-top: clamp(12px, 2vw, 17px); }
 .comparison figcaption { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--muted); font-family: var(--font-medium); font-weight: 600; font-size: 11px; text-transform: uppercase; }
@@ -180,7 +166,6 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .comparison-control::-webkit-slider-thumb { appearance: none; width: 42px; height: 42px; }
 .comparison-control::-moz-range-thumb { width: 42px; height: 42px; border: 0; }
 
-/* Graphic Design & Merch */
 .design-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(16px, 4vw, 44px); margin-bottom: clamp(28px, 4vw, 40px); }
 .design-options article { border-top: 1px solid var(--line); padding-top: 14px; }
 .design-options p { margin-top: 7px; max-width: 43ch; color: var(--muted); }
@@ -202,7 +187,6 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .graphic-actions, .contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .graphic-actions { margin-top: 24px; }
 
-/* Pricing */
 .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: clamp(16px, 2vw, 24px); }
 .plan { display: flex; flex-direction: column; align-items: start; border: 1px solid var(--line); padding: clamp(24px, 4vw, 42px); border-radius: 3px; background: var(--panel); }
 .plan-audience { margin-top: 16px; color: var(--muted); font-size: clamp(14px, 1vw, 16px); }
@@ -215,15 +199,50 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .addons { display: flex; flex-wrap: wrap; gap: 10px 24px; border-bottom: 1px solid var(--line); padding: 18px 0; color: var(--muted); font-size: clamp(13px, 1vw, 14px); margin-top: 24px; }
 .addons strong { color: var(--text); }
 
-.maintenance { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(18px, 4vw, 44px); align-items: start; margin-top: 24px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); padding: clamp(24px, 4vw, 42px); }
+/* =========================================
+   БЛОК ОБСЛУЖИВАНИЯ (Maintenance)
+   ========================================= */
+.maintenance { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); 
+  gap: clamp(16px, 3vw, 32px); /* Уменьшили расстояние между колонками по центру */
+  align-items: stretch; 
+  margin-top: 24px; 
+  border: 1px solid var(--line); 
+  border-radius: 3px; 
+  background: var(--surface); 
+  padding: clamp(24px, 4vw, 42px); 
+}
+
+/* Правая колонка */
+.maintenance > div:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Прижимаем контент к низу */
+  height: 100%;
+}
+
 .care-price { margin: 12px 0 8px; color: var(--yellow); font-family: var(--font-heavy); font-weight: 800; font-size: clamp(26px, 4vw, 40px); letter-spacing: -.03em; line-height: 1.1; }
 .care-price span { font-family: var(--font-medium); font-size: clamp(12px, 1vw, 14px); letter-spacing: 0; }
 .maintenance h3 { margin-block: 9px; color: var(--yellow); }
 .maintenance p:last-child { color: var(--muted); max-width: 330px; font-size: clamp(14px, 1vw, 16px); }
-.maintenance ul { display: grid; gap: 8px; margin: 0 0 18px; padding-left: 20px; font-size: clamp(14px, 1vw, 16px); }
+
+/* Список */
+.maintenance ul { 
+  display: grid; 
+  gap: 4px; /* Уменьшили расстояние между самими пунктами списка */
+  margin: 0 0 16px 0; /* Уменьшили расстояние до кнопки */
+  padding-left: 20px; 
+  font-size: clamp(14px, 1vw, 16px); 
+}
 .maintenance li::marker { color: var(--yellow); }
 
-/* Process */
+/* Кнопка */
+.maintenance .button {
+  align-self: flex-end; /* Прижимаем вправо */
+  margin-top: 0;
+}
+
 .process { background: var(--panel); }
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: clamp(20px, 4vw, 30px); padding: 0; margin: 0; list-style: none; }
 .steps li { border-top: 1px solid var(--line); padding-top: 15px; }
@@ -231,14 +250,12 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .steps h3 { margin-block: 10px 9px; }
 .steps p { color: var(--muted); font-size: clamp(14px, 1vw, 16px); }
 
-/* About */
 .about { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); align-items: center; gap: clamp(24px, 6vw, 80px); }
 .about-portrait { width: 100%; max-width: clamp(280px, 40vw, 430px); aspect-ratio: 1.04; overflow: hidden; border-radius: 3px; background: var(--yellow); }
 .about-portrait img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 53%; }
 .about h2 { font-size: clamp(34px, 4.5vw, 65px); }
 .about p:last-child { margin-top: 18px; max-width: 470px; color: var(--muted); }
 
-/* Contact & Form */
 .contact { text-align: center; padding-bottom: clamp(53px, 7vw, 89px); }
 .contact h2 { color: var(--yellow); max-width: 700px; margin: 14px auto 24px; }
 .contact-actions { justify-content: center; }
@@ -259,18 +276,37 @@ textarea { resize: vertical; }
 #form-status { font-size: clamp(13px, 1vw, 14px); color: var(--yellow); margin-top: 8px; }
 #form-status:empty { display: none; }
 
-/* Footer */
 .footer { min-height: clamp(66px, 6vw, 88px); border-top: 1px solid var(--line); color: var(--text); font-size: clamp(12px, 1vw, 13px); padding-block: 16px; flex-wrap: wrap; }
 .footer .brand { font-size: clamp(24px, 3vw, 42px); }
 .footer p { color: var(--muted); }
 .footer a:hover { color: var(--yellow); }
 
 /* =========================================
-   ЕДИНСТВЕННЫЙ МЕДИАЗАПРОС (для переноса меню)
+   АДАПТИВНЫЕ ИСПРАВЛЕНИЯ ДЛЯ МОБИЛЬНЫХ
    ========================================= */
+@media (max-width: 620px) {
+  .graphic-grid, .merch-grid, .maintenance, .design-options { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .maintenance > div:last-child {
+    justify-content: flex-start; 
+    height: auto;
+  }
+  .maintenance ul {
+    margin-bottom: 18px; 
+  }
+  .maintenance .button {
+    align-self: flex-start; 
+  }
+}
+
 @media (max-width: 500px) {
   .header { flex-direction: column; align-items: flex-start; gap: 12px; }
   nav { order: 3; border-top: 1px solid var(--line); width: 100%; padding-top: 9px; }
   .footer { flex-direction: column; align-items: flex-start; }
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+@media (prefers-reduced-motion: reduce) { 
+  html { scroll-behavior: auto; } 
+}
