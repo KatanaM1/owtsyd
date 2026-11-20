@@ -33,14 +33,14 @@ const ITEMS = [
   {
     id: 'adrr-gt',
     title: 'ADRR × Gaijin Tuned',
-    cover: '/merch-adrr-gt.webp',
+    cover: '/merch-adrr-gt.jfif',
     coverAlt: 'ADRR and Gaijin Tuned T-shirt',
     images: formatImages(adrrGtModules)
   },
   {
     id: 'adr-racing',
     title: 'ADR Racing Team',
-    cover: '/merch-adr-racing.webp',
+    cover: '/merch-adr-racing.jfif',
     coverAlt: 'ADR Racing team apparel',
     images: formatImages(adrRacingModules)
   },

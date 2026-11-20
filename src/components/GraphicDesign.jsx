@@ -25,7 +25,7 @@ const formatImages = (modules) => {
 const GRAPHICS = [
   { 
     id: 'logos',
-    src: '/graphic-logos.webp', 
+    src: '/graphic-logos.jfif', 
     alt: 'A collection of logo and wordmark designs', 
     caption: 'Logos & identity',
     images: formatImages(logoModules)
