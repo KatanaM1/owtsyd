@@ -1,12 +1,61 @@
+import { useState } from 'react'
 import Merch from './Merch.jsx'
+import GalleryModal from './GalleryModal.jsx'
+
+// ВНИМАНИЕ: Используем **/* (ищем во всех подпапках) и * (любое расширение)
+const logoModules = import.meta.glob('/src/assets/gallery/logos/**/*', { eager: true, import: 'default' })
+const posterModules = import.meta.glob('/src/assets/gallery/posters/**/*', { eager: true, import: 'default' })
+const menuModules = import.meta.glob('/src/assets/gallery/menus/**/*', { eager: true, import: 'default' })
+
+// Этот лог покажет в консоли, что именно нашел Vite
+console.log("Что нашел Vite в logos:", logoModules);
+
+function shuffle(array) {
+  const arr = [...array]
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr
+}
+
+const formatImages = (modules) => {
+  // Отфильтровываем возможный мусор (например, файлы .DS_Store)
+  const validUrls = Object.values(modules).filter(src => typeof src === 'string')
+  
+  return shuffle(validUrls).map((src, i) => ({
+    src,
+    alt: `Design project ${i + 1}`
+  }))
+}
 
 const GRAPHICS = [
-  { src: '/graphic-logos.webp', alt: 'A collection of logo and wordmark designs', caption: 'Logos & identity' },
-  { src: '/graphic-posters.webp', alt: 'Four event posters', caption: 'Posters & promotions' },
-  { src: '/graphic-menus.webp', alt: 'A red restaurant menu set', caption: 'Menus & print' },
+  { 
+    id: 'logos',
+    src: '/graphic-logos.webp', 
+    alt: 'A collection of logo and wordmark designs', 
+    caption: 'Logos & identity',
+    images: formatImages(logoModules)
+  },
+  { 
+    id: 'posters',
+    src: '/graphic-posters.webp', 
+    alt: 'Four event posters', 
+    caption: 'Posters & promotions',
+    images: formatImages(posterModules)
+  },
+  { 
+    id: 'menus',
+    src: '/graphic-menus.jfif', 
+    alt: 'A red restaurant menu set', 
+    caption: 'Menus & print',
+    images: formatImages(menuModules)
+  },
 ]
 
 export default function GraphicDesign({ onOpenBrief }) {
+  const [activeGallery, setActiveGallery] = useState(null)
+
   return (
     <section className="section graphic-design" id="graphic-design" aria-labelledby="graphic-title">
       <div className="wrap">
@@ -33,11 +82,21 @@ export default function GraphicDesign({ onOpenBrief }) {
           {GRAPHICS.map((g) => (
             <figure key={g.src}>
               <img src={g.src} alt={g.alt} width="1152" height="648" loading="lazy" />
-              <figcaption>{g.caption}</figcaption>
+              <figcaption 
+                className="clickable-caption" 
+                onClick={() => setActiveGallery(g)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveGallery(g) }}
+              >
+                {g.caption} <span>↗</span>
+              </figcaption>
             </figure>
           ))}
         </div>
+        
         <Merch />
+        
         <div className="graphic-actions">
           <a className="button accent" href="#brief-form" onClick={(e) => { e.preventDefault(); onOpenBrief('Graphic design'); }}>
             Discuss a Design Project <span aria-hidden="true">↗</span>
@@ -47,6 +106,13 @@ export default function GraphicDesign({ onOpenBrief }) {
           </a>
         </div>
       </div>
+
+      <GalleryModal 
+        isOpen={!!activeGallery} 
+        onClose={() => setActiveGallery(null)} 
+        title={activeGallery?.caption}
+        images={activeGallery?.images || []}
+      />
     </section>
   )
 }
