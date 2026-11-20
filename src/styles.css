@@ -33,9 +33,26 @@ body {
 }
 
 h1, h2, h3, p, figure { margin: 0; }
-a { color: inherit; text-decoration: none; }
-button, input, select, textarea { font: inherit; }
-button { cursor: pointer; }
+
+/* Фикс для ссылок и сброс тапов на iOS */
+a { 
+  color: inherit; 
+  text-decoration: none; 
+  -webkit-tap-highlight-color: transparent; 
+}
+
+/* ФИКС КНОПОК ДЛЯ iOS */
+button, input, select, textarea { 
+  font: inherit; 
+  -webkit-appearance: none; 
+  appearance: none;
+}
+
+button { 
+  cursor: pointer; 
+  -webkit-tap-highlight-color: transparent; 
+}
+
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
 section[id] { scroll-margin-top: 14px; }
 
@@ -58,7 +75,7 @@ h1, h2, h3 {
   letter-spacing: -.02em; 
 }
 
-/* ИСПРАВЛЕННЫЙ ГЛАВНЫЙ ЗАГОЛОВОК */
+/* ИСПРАВЛЕННЫЙ ГЛАВНЫЙ ЗАГОЛОВОК (чтобы влезало слово Business) */
 h1 { 
   max-width: 100%; 
   margin-block: clamp(16px, 3vw, 22px); 
@@ -140,8 +157,29 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .hero-window { width: 84%; margin-right: 9%; border: 1px solid #b7aa52; box-shadow: clamp(4px, 1vw, 8px) clamp(4px, 1vw, 8px) 0 #0005; }
 .hero-phone { position: absolute; bottom: 7%; right: 5%; width: 25%; border: 1px solid var(--yellow); border-radius: 5px; box-shadow: clamp(3px, 1vw, 6px) clamp(3px, 1vw, 6px) 0 #0008; }
 
-.button { display: inline-flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 49px; padding: clamp(10px, 1.5vw, 14px) clamp(16px, 2vw, 20px); border: 1px solid transparent; border-radius: 2px; font-size: clamp(13px, 1vw, 14px); font-weight: 600; font-family: var(--font-medium); transition: all 0.2s ease; }
-.button span { font-size: 18px; }
+/* КНОПКИ */
+.button { 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 12px; 
+  min-height: 49px; 
+  padding: clamp(10px, 1.5vw, 14px) clamp(16px, 2vw, 20px); 
+  border: 1px solid transparent; 
+  border-radius: 2px; 
+  font-size: clamp(13px, 1vw, 14px); 
+  font-weight: 600; 
+  font-family: var(--font-medium); 
+  transition: all 0.2s ease; 
+}
+
+/* ФИКС СТРЕЛОК НА IPHONE */
+.button span { 
+  font-size: 18px; 
+  font-family: Arial, sans-serif; /* Принудительно текст вместо эмодзи */
+  line-height: 1;
+}
+
 .accent { color: #191919; background: var(--yellow); }
 .accent:hover { background: var(--hover); }
 .outline { color: var(--yellow); border-color: var(--line); }
@@ -167,8 +205,8 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .comparison-before { clip-path: inset(0 calc(100% - var(--position)) 0 0); }
 .comparison-divider { position: absolute; inset-block: 0; left: var(--position); width: 2px; transform: translateX(-50%); background: var(--yellow); box-shadow: 0 0 8px #23181588; pointer-events: none; }
 .comparison-divider span { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); display: grid; place-items: center; width: 42px; height: 42px; border: 2px solid var(--yellow); border-radius: 50%; background: var(--yellow); color: var(--paper); font-size: 19px; font-weight: 800; letter-spacing: .02em; box-shadow: 0 3px 12px #23181566; }
-.comparison-control { position: absolute; inset: 0 -21px; width: calc(100% + 42px); height: 100%; margin: 0; padding: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; appearance: none; }
-.comparison-control::-webkit-slider-thumb { appearance: none; width: 42px; height: 42px; }
+.comparison-control { position: absolute; inset: 0 -21px; width: calc(100% + 42px); height: 100%; margin: 0; padding: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; appearance: none; -webkit-appearance: none; }
+.comparison-control::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 42px; height: 42px; }
 .comparison-control::-moz-range-thumb { width: 42px; height: 42px; border: 0; }
 
 /* Graphic Design & Merch */
@@ -203,6 +241,7 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .merch-project .clickable-caption span {
   font-size: 12px;
   color: var(--yellow);
+  font-family: Arial, sans-serif; /* Фикс для стрелочки */
 }
 
 .merch { margin-top: clamp(32px, 5vw, 62px); }
