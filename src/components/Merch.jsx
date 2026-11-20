@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import GalleryModal from './GalleryModal.jsx'
 
-// Убираем фильтры, забираем все файлы рекурсивно
-const hkgModules = import.meta.glob('/src/assets/gallery/merch/hkg/**/*', { eager: true, import: 'default' })
-const adrrGtModules = import.meta.glob('/src/assets/gallery/merch/adrr-gt/**/*', { eager: true, import: 'default' })
-const adrRacingModules = import.meta.glob('/src/assets/gallery/merch/adr-racing/**/*', { eager: true, import: 'default' })
+const hkgModules = import.meta.glob('/src/assets/gallery/merch/hkg/*.{webp,png,jpg,jpeg,jfif,WEBP,PNG,JPG,JPEG,JFIF}', { eager: true, import: 'default' })
+const adrrGtModules = import.meta.glob('/src/assets/gallery/merch/adrr-gt/*.{webp,png,jpg,jpeg,jfif,WEBP,PNG,JPG,JPEG,JFIF}', { eager: true, import: 'default' })
+const adrRacingModules = import.meta.glob('/src/assets/gallery/merch/adr-racing/*.{webp,png,jpg,jpeg,jfif,WEBP,PNG,JPG,JPEG,JFIF}', { eager: true, import: 'default' })
 
 function shuffle(array) {
   const arr = [...array]
@@ -16,8 +15,7 @@ function shuffle(array) {
 }
 
 const formatImages = (modules) => {
-  const validUrls = Object.values(modules).filter(src => typeof src === 'string')
-  return shuffle(validUrls).map((src, i) => ({
+  return shuffle(Object.values(modules)).map((src, i) => ({
     src,
     alt: `Garment image ${i + 1}`
   }))
@@ -65,12 +63,16 @@ export default function Merch() {
         {ITEMS.map((item) => (
           <article className="merch-project" key={item.id}>
             <img
-              className={`merch-cover ${item.coverClass ?? ''}`.trim()}
+              className={`merch-cover clickable-image ${item.coverClass ?? ''}`.trim()}
               src={item.cover}
               alt={item.coverAlt}
               width="1024"
               height="768"
               loading="lazy"
+              onClick={() => openGallery(item)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openGallery(item) }}
             />
             <h4>{item.title}</h4>
             <span 

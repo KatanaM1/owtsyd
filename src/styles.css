@@ -217,7 +217,16 @@ nav a:hover { color: var(--yellow); text-decoration: underline; text-underline-o
 .graphic-grid, .merch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: clamp(16px, 3vw, 30px); }
 .graphic-grid img { display: block; width: 100%; height: auto; border-radius: 3px; }
 
-/* Кликабельные подписи в галереях */
+/* Кликабельные картинки и подписи */
+.clickable-image {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.clickable-image:hover {
+  opacity: 0.85;
+}
+
 .graphic-grid figcaption.clickable-caption,
 .merch-project .clickable-caption {
   display: inline-flex;

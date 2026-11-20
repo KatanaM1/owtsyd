@@ -2,13 +2,9 @@ import { useState } from 'react'
 import Merch from './Merch.jsx'
 import GalleryModal from './GalleryModal.jsx'
 
-// ВНИМАНИЕ: Используем **/* (ищем во всех подпапках) и * (любое расширение)
-const logoModules = import.meta.glob('/src/assets/gallery/logos/**/*', { eager: true, import: 'default' })
-const posterModules = import.meta.glob('/src/assets/gallery/posters/**/*', { eager: true, import: 'default' })
-const menuModules = import.meta.glob('/src/assets/gallery/menus/**/*', { eager: true, import: 'default' })
-
-// Этот лог покажет в консоли, что именно нашел Vite
-console.log("Что нашел Vite в logos:", logoModules);
+const logoModules = import.meta.glob('/src/assets/gallery/logos/*.{webp,png,jpg,jpeg,jfif,WEBP,PNG,JPG,JPEG,JFIF}', { eager: true, import: 'default' })
+const posterModules = import.meta.glob('/src/assets/gallery/posters/*.{webp,png,jpg,jpeg,jfif,WEBP,PNG,JPG,JPEG,JFIF}', { eager: true, import: 'default' })
+const menuModules = import.meta.glob('/src/assets/gallery/menus/*.{webp,png,jpg,jpeg,jfif,WEBP,PNG,JPG,JPEG,JFIF}', { eager: true, import: 'default' })
 
 function shuffle(array) {
   const arr = [...array]
@@ -20,10 +16,7 @@ function shuffle(array) {
 }
 
 const formatImages = (modules) => {
-  // Отфильтровываем возможный мусор (например, файлы .DS_Store)
-  const validUrls = Object.values(modules).filter(src => typeof src === 'string')
-  
-  return shuffle(validUrls).map((src, i) => ({
+  return shuffle(Object.values(modules)).map((src, i) => ({
     src,
     alt: `Design project ${i + 1}`
   }))
@@ -81,7 +74,18 @@ export default function GraphicDesign({ onOpenBrief }) {
         <div className="graphic-grid">
           {GRAPHICS.map((g) => (
             <figure key={g.src}>
-              <img src={g.src} alt={g.alt} width="1152" height="648" loading="lazy" />
+              <img 
+                src={g.src} 
+                alt={g.alt} 
+                width="1152" 
+                height="648" 
+                loading="lazy" 
+                className="clickable-image"
+                onClick={() => setActiveGallery(g)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveGallery(g) }}
+              />
               <figcaption 
                 className="clickable-caption" 
                 onClick={() => setActiveGallery(g)}
