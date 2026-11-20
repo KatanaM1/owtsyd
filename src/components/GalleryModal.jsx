@@ -3,15 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 export default function GalleryModal({ isOpen, onClose, title, images }) {
   const dialogRef = useRef(null)
   const lightboxRef = useRef(null)
-  
-  // Теперь храним индекс текущей картинки, а не просто ссылку
+  const trackRef = useRef(null)
   const [currentIndex, setCurrentIndex] = useState(null)
-  
-  // Состояния для свайпов на мобилках
-  const [touchStart, setTouchStart] = useState(null)
-  const [touchEnd, setTouchEnd] = useState(null)
 
-  // Синхронизация основного окна галереи
+  // Управление основным окном галереи
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
@@ -19,12 +14,25 @@ export default function GalleryModal({ isOpen, onClose, title, images }) {
     else if (!isOpen && dialog.open) dialog.close()
   }, [isOpen])
 
-  // Синхронизация окна Lightbox (полноэкранной картинки)
+  // Управление окном Lightbox (полноэкранной картинки)
   useEffect(() => {
     const lightbox = lightboxRef.current
     if (!lightbox) return
-    if (currentIndex !== null && !lightbox.open) lightbox.showModal()
-    else if (currentIndex === null && lightbox.open) lightbox.close()
+    
+    if (currentIndex !== null && !lightbox.open) {
+      lightbox.showModal()
+      // Мгновенно прокручиваем к нужной картинке при открытии
+      setTimeout(() => {
+        if (trackRef.current) {
+          trackRef.current.scrollTo({
+            left: currentIndex * trackRef.current.clientWidth,
+            behavior: 'auto'
+          })
+        }
+      }, 10)
+    } else if (currentIndex === null && lightbox.open) {
+      lightbox.close()
+    }
   }, [currentIndex])
 
   // Сброс при закрытии галереи
@@ -46,42 +54,38 @@ export default function GalleryModal({ isOpen, onClose, title, images }) {
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
-  // Функции перелистывания
-  const nextImage = () => setCurrentIndex((prev) => (prev + 1) % images.length)
-  const prevImage = () => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
+  // Функция прокрутки к определенной картинке (для стрелок и клавиатуры)
+  const scrollToImage = (index) => {
+    if (!trackRef.current) return
+    const newIndex = Math.max(0, Math.min(index, images.length - 1))
+    trackRef.current.scrollTo({
+      left: newIndex * trackRef.current.clientWidth,
+      behavior: 'smooth'
+    })
+    setCurrentIndex(newIndex)
+  }
 
-  // Обработка клавиатуры (стрелочки влево/вправо) для ПК
+  // Отслеживаем нативный скролл (когда пользователь листает пальцем)
+  const handleScroll = (e) => {
+    const scrollLeft = e.target.scrollLeft
+    const width = e.target.clientWidth
+    const newIndex = Math.round(scrollLeft / width)
+    
+    if (newIndex !== currentIndex && newIndex >= 0 && newIndex < images.length) {
+      setCurrentIndex(newIndex)
+    }
+  }
+
+  // Обработка клавиатуры (стрелочки на ПК)
   useEffect(() => {
     if (currentIndex === null) return
     const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') nextImage()
-      if (e.key === 'ArrowLeft') prevImage()
+      if (e.key === 'ArrowRight') scrollToImage(currentIndex + 1)
+      if (e.key === 'ArrowLeft') scrollToImage(currentIndex - 1)
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [currentIndex, images.length])
-
-  // Обработка свайпов для мобильных устройств
-  const minSwipeDistance = 50 // Минимальная длина свайпа в пикселях
-
-  const onTouchStart = (e) => {
-    setTouchEnd(null) // Сбрасываем предыдущий свайп
-    setTouchStart(e.targetTouches[0].clientX)
-  }
-
-  const onTouchMove = (e) => {
-    setTouchEnd(e.targetTouches[0].clientX)
-  }
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return
-    const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > minSwipeDistance
-    const isRightSwipe = distance < -minSwipeDistance
-
-    if (isLeftSwipe) nextImage()
-    if (isRightSwipe) prevImage()
-  }
 
   return (
     <>
@@ -105,7 +109,7 @@ export default function GalleryModal({ isOpen, onClose, title, images }) {
                 src={img.src} 
                 alt={img.alt} 
                 loading="lazy" 
-                onClick={() => setCurrentIndex(index)} // Передаем индекс
+                onClick={() => setCurrentIndex(index)}
                 className="gallery-thumb"
               />
             ))
@@ -114,38 +118,20 @@ export default function GalleryModal({ isOpen, onClose, title, images }) {
       </dialog>
 
       {/* Окно просмотра картинки */}
-      <dialog 
-        ref={lightboxRef} 
-        className="lightbox-modal" 
-        onClick={() => setCurrentIndex(null)} 
-      >
+      <dialog ref={lightboxRef} className="lightbox-modal">
         {currentIndex !== null && (
-          <div 
-            className="lightbox-content"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-          >
-            {/* Кнопка Назад (стрелка влево) */}
+          <div className="lightbox-container">
+            {/* Кнопки-стрелки для ПК */}
             <button 
               className="lightbox-nav prev" 
-              onClick={(e) => { e.stopPropagation(); prevImage(); }}
+              onClick={() => scrollToImage(currentIndex - 1)}
               aria-label="Previous image"
             >
               ‹
             </button>
-
-            <img 
-              src={images[currentIndex].src} 
-              alt={images[currentIndex].alt} 
-              className="lightbox-image" 
-              onClick={(e) => e.stopPropagation()} 
-            />
-
-            {/* Кнопка Вперед (стрелка вправо) */}
             <button 
               className="lightbox-nav next" 
-              onClick={(e) => { e.stopPropagation(); nextImage(); }}
+              onClick={() => scrollToImage(currentIndex + 1)}
               aria-label="Next image"
             >
               ›
@@ -153,11 +139,33 @@ export default function GalleryModal({ isOpen, onClose, title, images }) {
 
             <button 
               className="lightbox-close" 
-              onClick={(e) => { e.stopPropagation(); setCurrentIndex(null); }}
+              onClick={() => setCurrentIndex(null)}
               aria-label="Close enlarged image"
             >
               ×
             </button>
+
+            {/* Лента с картинками (Скролл-снап) */}
+            <div 
+              className="lightbox-track" 
+              ref={trackRef} 
+              onScroll={handleScroll}
+            >
+              {images.map((img, index) => (
+                <div 
+                  className="lightbox-slide" 
+                  key={index}
+                  onClick={() => setCurrentIndex(null)} // Клик по фону закрывает
+                >
+                  <img 
+                    src={img.src} 
+                    alt={img.alt} 
+                    className="lightbox-image" 
+                    onClick={(e) => e.stopPropagation()} // Клик по картинке не закрывает
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </dialog>
